@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concept C: Neo-Tactile — 4-Status Ticket Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    /* CONCEPT C: NEO-TACTILE (Soft Dimensionality, Rounded Pill Surfaces & Clay Tactility) */
+    :root {
+      --canvas-tint: #EDF2F7;
+      --surface-card: #FFFFFF;
+      --surface-lane: #E2E8F0;
+      --surface-hover: #F8FAFC;
+      --text-bold: #0F172A;
+      --text-medium: #475569;
+      --text-light: #94A3B8;
+      --brand-vibe: #4F46E5;
+      --brand-vibe-hover: #4338CA;
+      --lane-backlog: #64748B;
+      --lane-todo: #2563EB;
+      --lane-progress: #D97706;
+      --lane-done: #059669;
+      --shadow-soft: 0 4px 12px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
+      --shadow-hover: 0 12px 24px rgba(15, 23, 42, 0.08), 0 4px 8px rgba(15, 23, 42, 0.04);
+      --shadow-lifted: 0 20px 32px rgba(15, 23, 42, 0.12);
+      --radius-pill: 9999px;
+      --radius-box: 16px;
+      --radius-sm: 10px;
+      --font-dmsans: 'DM Sans', -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-dmsans);
+      background-color: var(--canvas-tint);
+      color: var(--text-bold);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* CONCEPT C BANNER */
+    .tactile-banner {
+      background: #FFFFFF;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+    .badge-tactile {
+      background: #EEF2FF;
+      color: var(--brand-vibe);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+      font-size: 11px;
+      box-shadow: inset 0 1px 2px rgba(79, 70, 229, 0.1);
+    }
+    .tactile-info-btn {
+      background: #F1F5F9;
+      border: none;
+      color: var(--text-bold);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tactile-info-btn:hover { background: #E2E8F0; }
+
+    /* HEADER */
+    .tactile-header {
+      background: #FFFFFF;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .circle-avatar-brand {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #6366F1, #4F46E5);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+    }
+    .brand-caption {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .user-pill-tactile {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-medium);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .user-avatar-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #10B981;
+    }
+
+    .btn-tactile {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.1s ease, box-shadow 0.15s ease;
+      outline: none;
+    }
+    .btn-tactile:active {
+      transform: scale(0.96);
+    }
+    .btn-tactile:focus-visible {
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.35);
+    }
+    .btn-tactile-primary {
+      background: var(--brand-vibe);
+      color: white;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+    .btn-tactile-primary:hover {
+      background: var(--brand-vibe-hover);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+    }
+    .btn-tactile-subtle {
+      background: #F1F5F9;
+      color: var(--text-bold);
+    }
+    .btn-tactile-subtle:hover { background: #E2E8F0; }
+
+    /* AUTH VIEW */
+    .tactile-auth-box {
+      max-width: 420px;
+      margin: 80px auto;
+      padding: 36px;
+      background: #FFFFFF;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+      border: 1px solid #F1F5F9;
+    }
+    .tactile-input {
+      width: 100%;
+      background: #F8FAFC;
+      border: 2px solid transparent;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-family: var(--font-dmsans);
+      border-radius: 12px;
+      outline: none;
+      transition: all 0.15s;
+      margin-top: 6px;
+    }
+    .tactile-input:focus {
+      background: #FFFFFF;
+      border-color: var(--brand-vibe);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+    }
+
+    /* BOARD MAIN */
+    .tactile-stage {
+      flex: 1;
+      padding: 28px;
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .stage-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    /* SEGMENTED TABS (MOBILE) */
+    .tactile-lane-tabs {
+      display: none;
+      background: #E2E8F0;
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+    .lane-pill-tab {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-medium);
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+    }
+    .lane-pill-tab.active {
+      background: #FFFFFF;
+      color: var(--text-bold);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* LANES DECK */
+    .lanes-deck {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .lane-card-box {
+      background: #F8FAFC;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #E2E8F0;
+      min-height: 520px;
+    }
+    .lane-title-pill {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 8px 14px 8px;
+      border-bottom: 1px solid #E2E8F0;
+    }
+    .lane-heading {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot-lane {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .dot-backlog { background: var(--lane-backlog); }
+    .dot-todo { background: var(--lane-todo); }
+    .dot-in_progress { background: var(--lane-progress); }
+    .dot-done { background: var(--lane-done); }
+
+    .counter-bubble {
+      background: #FFFFFF;
+      padding: 2px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-medium);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .cards-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 12px 0;
+      flex: 1;
+      min-height: 120px;
+    }
+    .cards-stack.drag-hovering {
+      background: rgba(79, 70, 229, 0.06);
+      border-radius: 14px;
+      outline: 2px dashed var(--brand-vibe);
+    }
+
+    /* TACTILE CARD */
+    .tactile-card {
+      background: var(--surface-card);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+      cursor: grab;
+      border: 1px solid rgba(226, 232, 240, 0.7);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      position: relative;
+    }
+    .tactile-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+    .tactile-card:focus-visible {
+      outline: 3px solid var(--brand-vibe);
+      outline-offset: 2px;
+    }
+    .tactile-card.dragging {
+      opacity: 0.3;
+      transform: scale(0.95);
+      cursor: grabbing;
+    }
+    .card-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .badge-id {
+      background: #F1F5F9;
+      color: var(--text-medium);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .btn-dot-menu {
+      background: transparent;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 6px;
+      padding: 2px 6px;
+    }
+    .btn-dot-menu:hover { background: #F1F5F9; color: var(--text-bold); }
+    .card-heading-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      color: var(--text-bold);
+    }
+    .tag-bubble-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .pill-tag {
+      background: #EEF2FF;
+      color: var(--brand-vibe);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* EMPTY LANE STATE */
+    .tactile-empty {
+      background: #FFFFFF;
+      border: 2px dashed #CBD5E1;
+      border-radius: 14px;
+      padding: 24px 16px;
+      text-align: center;
+      color: var(--text-medium);
+    }
+
+    .lane-bottom-btn {
+      width: 100%;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      color: var(--text-medium);
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lane-bottom-btn:hover {
+      background: #EEF2FF;
+      color: var(--brand-vibe);
+      border-color: #C7D2FE;
+    }
+
+    /* MODAL */
+    .tactile-modal-veil {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .tactile-modal-veil.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .tactile-modal-card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      width: 90%;
+      max-width: 520px;
+      box-shadow: var(--shadow-lifted);
+      overflow: hidden;
+      transform: scale(0.95);
+      transition: transform 0.2s;
+    }
+    .tactile-modal-veil.open .tactile-modal-card {
+      transform: scale(1);
+    }
+    .tactile-modal-head {
+      padding: 20px 24px;
+      border-bottom: 1px solid #F1F5F9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tactile-modal-body { padding: 24px; }
+    .tactile-modal-foot {
+      padding: 16px 24px;
+      background: #F8FAFC;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* TOAST */
+    .tactile-toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: #0F172A;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 14px;
+      box-shadow: var(--shadow-lifted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 2000;
+    }
+
+    /* DRAWER */
+    .tactile-drawer {
+      display: none;
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 440px;
+      background: #FFFFFF;
+      border-left: 1px solid #E2E8F0;
+      padding: 32px;
+      z-index: 1500;
+      overflow-y: auto;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.06);
+    }
+    .tactile-drawer.open { display: block; }
+
+    @media (max-width: 1024px) {
+      .lanes-deck { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .tactile-lane-tabs { display: flex; }
+      .lanes-deck { grid-template-columns: 1fr; }
+      .lane-card-box { display: none; }
+      .lane-card-box.active-pane { display: flex; }
+      .tactile-stage { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tactile-banner">
+    <div>
+      <span class="badge-tactile">CONCEPT C</span>
+      <span style="margin-left: 8px;"><strong>Neo-Tactile:</strong> Soft Dimensionality, Claymorphism &amp; Rounded Pill Surfaces</span>
+    </div>
+    <button class="tactile-info-btn" id="openDrawerBtn">Concept Info ⓘ</button>
+  </div>
+
+  <div id="appContainer"></div>
+  <div id="toastRoot"></div>
+
+  <!-- DRAWER -->
+  <div class="tactile-drawer" id="sideDrawer">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+      <h3 style="font-size: 20px; font-weight:700;">Concept C Review</h3>
+      <button class="tactile-info-btn" id="closeDrawerBtn">✕</button>
+    </div>
+    <div style="margin-bottom: 20px;">
+      <h4 style="font-size:12px; text-transform:uppercase; color:var(--brand-vibe); margin-bottom:6px;">Design Philosophy</h4>
+      <p style="font-size:14px; color:var(--text-medium); line-height:1.6;">
+        Tactile friendly productivity (inspired by Craft Docs and modern iOS). Features soft dual-layer shadows, pill badges, bouncy tap scale feedback, and generous 16px rounded curves. Reduces intimidation for cross-functional teams.
+      </p>
+    </div>
+    <div style="margin-bottom: 20px;">
+      <h4 style="font-size:12px; text-transform:uppercase; color:var(--brand-vibe); margin-bottom:6px;">Interaction Risks</h4>
+      <p style="font-size:14px; color:var(--text-medium); line-height:1.6;">
+        1. Higher visual weight per card due to soft drop shadows.<br>
+        2. Requires precise color balancing to ensure pill badges remain readable against card white.
+      </p>
+    </div>
+    <div>
+      <h4 style="font-size:12px; text-transform:uppercase; color:var(--brand-vibe); margin-bottom:6px;">Contract Parity</h4>
+      <p style="font-size:14px; color:var(--text-medium); line-height:1.6;">
+        Fully implements the exact same 4-status model, modal checks, drag-and-drop, touch move popovers, and network rollback simulations.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY_SESSION = 'concept_c_session';
+    const STORAGE_KEY_TICKETS = 'concept_c_tickets';
+
+    const INITIAL_TICKETS = [
+      { id: 'TCK-301', title: 'Implement on-device OCR regex parser for VND', description: 'Ensure dots and commas are stripped, normalize 45k to 45000.', status: 'backlog', tags: ['parser', 'core'] },
+      { id: 'TCK-302', title: 'Design fallback Review & Verification screen', description: 'Prevent auto-commit to sqlite without user confirmation.', status: 'backlog', tags: ['ui', 'security'] },
+      { id: 'TCK-303', title: 'Set up sqflite local persistence table schema', description: 'Add indices for transaction_date and category.', status: 'todo', tags: ['database'] },
+      { id: 'TCK-304', title: 'Construct CustomPainter Category Donut chart', description: 'Zero dependency sweep angle animation with easeOutCubic.', status: 'in_progress', tags: ['canvas', 'chart'] },
+      { id: 'TCK-305', title: 'Weekly 7-day bar chart with tooltip feedback', description: 'Bo góc RRect, dynamic y-scale.', status: 'done', tags: ['canvas'] }
+    ];
+
+    let session = JSON.parse(localStorage.getItem(STORAGE_KEY_SESSION) || 'null');
+    let tickets = JSON.parse(localStorage.getItem(STORAGE_KEY_TICKETS) || JSON.stringify(INITIAL_TICKETS));
+    let currentTab = 'backlog';
+    let simError = false;
+    let editTicketId = null;
+    let dirtyFlag = false;
+
+    function persist() { localStorage.setItem(STORAGE_KEY_TICKETS, JSON.stringify(tickets)); }
+
+    function pushToast(msg, isErr = false, retryCb = null) {
+      const root = document.getElementById('toastRoot');
+      const toast = document.createElement('div');
+      toast.className = 'tactile-toast';
+      if (isErr) toast.style.background = '#991B1B';
+      toast.innerHTML = `<span>${msg}</span>`;
+      if (retryCb) {
+        const btn = document.createElement('button');
+        btn.textContent = 'Retry';
+        btn.style.cssText = 'background:#FFF; color:#991B1B; border:none; padding:4px 10px; border-radius:999px; font-weight:700; cursor:pointer; margin-left:8px;';
+        btn.onclick = () => { retryCb(); toast.remove(); };
+        toast.appendChild(btn);
+      }
+      root.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+
+    function render() {
+      const container = document.getElementById('appContainer');
+      if (!session) renderLogin(container);
+      else renderDesk(container);
+    }
+
+    function renderLogin(container) {
+      container.innerHTML = `
+        <div class="tactile-auth-box">
+          <div class="brand-mark" style="margin-bottom:20px;">
+            <div class="circle-avatar-brand">C</div>
+            <div class="brand-caption">Tactile Product Board</div>
+          </div>
+          <h2 style="font-size:22px; font-weight:700; margin-bottom:8px;">Welcome back</h2>
+          <p style="font-size:14px; color:var(--text-medium); margin-bottom:24px;">Sign in to your local workspace.</p>
+          <form id="authForm">
+            <div style="margin-bottom:16px;">
+              <label style="font-size:12px; font-weight:700; color:var(--text-medium);">Username / Email</label>
+              <input type="text" id="inEmail" class="tactile-input" placeholder="product.lead@company.co" required>
+            </div>
+            <div style="margin-bottom:24px;">
+              <label style="font-size:12px; font-weight:700; color:var(--text-medium);">Password (&ge; 6 chars)</label>
+              <input type="password" id="inPass" class="tactile-input" placeholder="••••••••" required minlength="6">
+            </div>
+            <button type="submit" class="btn-tactile btn-tactile-primary" style="width:100%;">Sign In</button>
+          </form>
+        </div>
+      `;
+
+      document.getElementById('authForm').onsubmit = (e) => {
+        e.preventDefault();
+        const email = document.getElementById('inEmail').value.trim();
+        session = { user: email || 'lead_pm' };
+        localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(session));
+        pushToast(`Connected as ${session.user}`);
+        render();
+      };
+    }
+
+    function renderDesk(container) {
+      const lanes = [
+        { id: 'backlog', name: 'Backlog', dot: 'dot-backlog' },
+        { id: 'todo', name: 'To Do', dot: 'dot-todo' },
+        { id: 'in_progress', name: 'In Progress', dot: 'dot-in_progress' },
+        { id: 'done', name: 'Done', dot: 'dot-done' }
+      ];
+
+      container.innerHTML = `
+        <header class="tactile-header">
+          <div class="brand-mark">
+            <div class="circle-avatar-brand">C</div>
+            <div>
+              <div class="brand-caption">Team Sprint Deck</div>
+              <div style="font-size:12px; color:var(--text-light); font-weight:500;">Concept C &bull; Neo-Tactile</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="user-pill-tactile">
+              <span class="user-avatar-dot"></span>
+              <span>${session.user}</span>
+            </div>
+            <button class="btn-tactile btn-tactile-primary" id="btnNew">+ New Ticket</button>
+            <button class="btn-tactile btn-tactile-subtle" id="btnLogout">Sign Out</button>
+          </div>
+        </header>
+
+        <main class="tactile-stage">
+          <div class="stage-bar">
+            <div>
+              <h2 style="font-size:20px; font-weight:700;">Tactile Cards Flow</h2>
+            </div>
+            <div>
+              <button class="btn-tactile btn-tactile-subtle" id="btnToggleSim" style="font-size:12px; ${simError ? 'background:#FEE2E2; color:#B91C1C;' : ''}">
+                Network Simulation: ${simError ? 'Error ON (Rollback)' : 'Normal'}
+              </button>
+            </div>
+          </div>
+
+          <div class="tactile-lane-tabs">
+            ${lanes.map(l => `
+              <button class="lane-pill-tab ${currentTab === l.id ? 'active' : ''}" data-tab="${l.id}">
+                ${l.name} (${tickets.filter(t => t.status === l.id).length})
+              </button>
+            `).join('')}
+          </div>
+
+          <div class="lanes-deck">
+            ${lanes.map(l => {
+              const laneItems = tickets.filter(t => t.status === l.id);
+              return `
+                <section class="lane-card-box ${currentTab === l.id ? 'active-pane' : ''}" data-lane="${l.id}">
+                  <div class="lane-title-pill">
+                    <span class="lane-heading">
+                      <span class="dot-lane ${l.dot}"></span>
+                      <span>${l.name}</span>
+                    </span>
+                    <span class="counter-bubble">${laneItems.length}</span>
+                  </div>
+
+                  <div class="cards-stack" data-lane="${l.id}">
+                    ${laneItems.length === 0 ? `
+                      <div class="tactile-empty">
+                        <div style="font-size:13px; font-weight:600; margin-bottom:6px;">All clear here</div>
+                        <button class="btn-tactile btn-tactile-subtle add-empty-btn" data-lane="${l.id}" style="padding:6px 14px; font-size:12px;">+ Add Card</button>
+                      </div>
+                    ` : laneItems.map(t => `
+                      <article class="tactile-card" draggable="true" data-id="${t.id}" tabindex="0">
+                        <div class="card-topbar">
+                          <span class="badge-id">${t.id}</span>
+                          <button class="btn-dot-menu" data-id="${t.id}">•••</button>
+                        </div>
+                        <h4 class="card-heading-title">${escape(t.title)}</h4>
+                        <div class="tag-bubble-group">
+                          ${t.tags.map(tag => `<span class="pill-tag">${escape(tag)}</span>`).join('')}
+                          ${t.description ? `<span style="font-size:12px; color:var(--text-light); margin-left:auto;">≡</span>` : ''}
+                        </div>
+                      </article>
+                    `).join('')}
+                  </div>
+
+                  <button class="lane-bottom-btn" data-lane="${l.id}">+ Add Ticket</button>
+                </section>
+              `;
+            }).join('')}
+          </div>
+        </main>
+
+        <!-- MODAL -->
+        <div class="tactile-modal-veil" id="modalVeil">
+          <div class="tactile-modal-card">
+            <div class="tactile-modal-head">
+              <h3 style="font-size:18px; font-weight:700;" id="modalTitle">New Ticket</h3>
+              <button class="btn-dot-menu" id="modalDismiss">✕</button>
+            </div>
+            <div class="tactile-modal-body">
+              <form id="cardForm">
+                <div style="margin-bottom:16px;">
+                  <div style="display:flex; justify-content:space-between;">
+                    <label style="font-size:12px; font-weight:700; color:var(--text-medium);">Title *</label>
+                    <span id="counterSpan" style="font-size:11px; color:var(--text-light);">0/100</span>
+                  </div>
+                  <input type="text" id="fldTitle" class="tactile-input" maxlength="100" placeholder="Card title..." required>
+                  <div id="fldTitleErr" style="color:#DC2626; font-size:12px; margin-top:4px; display:none;">Title is required.</div>
+                </div>
+                <div style="margin-bottom:16px;">
+                  <label style="font-size:12px; font-weight:700; color:var(--text-medium);">Lane</label>
+                  <select id="fldStatus" class="tactile-input">
+                    <option value="backlog">Backlog</option>
+                    <option value="todo">To Do</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="done">Done</option>
+                  </select>
+                </div>
+                <div style="margin-bottom:16px;">
+                  <label style="font-size:12px; font-weight:700; color:var(--text-medium);">Tags (comma separated)</label>
+                  <input type="text" id="fldTags" class="tactile-input" placeholder="design, ui, mobile">
+                </div>
+                <div>
+                  <label style="font-size:12px; font-weight:700; color:var(--text-medium);">Description</label>
+                  <textarea id="fldDesc" class="tactile-input" rows="3" placeholder="Context..."></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="tactile-modal-foot">
+              <button type="button" class="btn-tactile btn-tactile-subtle" id="fldDelete" style="color:#DC2626; display:none;">Delete</button>
+              <div style="display:flex; gap:10px; margin-left:auto;">
+                <button type="button" class="btn-tactile btn-tactile-subtle" id="fldCancel">Cancel</button>
+                <button type="button" class="btn-tactile btn-tactile-primary" id="fldSave">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DISCARD CONFIRM -->
+        <div class="tactile-modal-veil" id="discardVeil">
+          <div class="tactile-modal-card" style="max-width:380px; padding:24px;">
+            <h4 style="font-size:18px; font-weight:700; margin-bottom:8px;">Discard draft?</h4>
+            <p style="font-size:13px; color:var(--text-medium); margin-bottom:20px;">Your changes will not be saved.</p>
+            <div style="display:flex; justify-content:flex-end; gap:8px;">
+              <button class="btn-tactile btn-tactile-subtle" id="discardBackBtn">Keep Editing</button>
+              <button class="btn-tactile btn-tactile-primary" id="discardGoBtn" style="background:#DC2626;">Discard</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      bindEvents();
+    }
+
+    function escape(s) {
+      if (!s) return '';
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function bindEvents() {
+      document.getElementById('btnLogout').onclick = () => {
+        session = null;
+        localStorage.removeItem(STORAGE_KEY_SESSION);
+        render();
+      };
+
+      document.getElementById('btnToggleSim').onclick = () => {
+        simError = !simError;
+        render();
+      };
+
+      document.querySelectorAll('.lane-pill-tab').forEach(b => {
+        b.onclick = () => { currentTab = b.dataset.tab; render(); };
+      });
+
+      document.getElementById('btnNew').onclick = () => openModal(null, 'backlog');
+      document.querySelectorAll('.lane-bottom-btn, .add-empty-btn').forEach(b => {
+        b.onclick = () => openModal(null, b.dataset.lane);
+      });
+
+      document.querySelectorAll('.tactile-card').forEach(c => {
+        c.onclick = (e) => {
+          if (e.target.classList.contains('btn-dot-menu')) return;
+          openModal(c.dataset.id);
+        };
+        c.onkeydown = (e) => {
+          if (e.key === 'Enter') openModal(c.dataset.id);
+        };
+      });
+
+      document.querySelectorAll('.btn-dot-menu').forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          showTactileMenu(btn, btn.dataset.id);
+        };
+      });
+
+      setupTactileDnd();
+
+      document.getElementById('modalDismiss').onclick = tryClose;
+      document.getElementById('fldCancel').onclick = tryClose;
+      document.getElementById('fldSave').onclick = saveCard;
+      document.getElementById('fldDelete').onclick = deleteCard;
+
+      document.getElementById('fldTitle').oninput = (e) => {
+        dirtyFlag = true;
+        document.getElementById('counterSpan').textContent = `${e.target.value.length}/100`;
+      };
+      document.getElementById('fldDesc').oninput = () => dirtyFlag = true;
+      document.getElementById('fldTags').oninput = () => dirtyFlag = true;
+      document.getElementById('fldStatus').onchange = () => dirtyFlag = true;
+
+      document.getElementById('discardBackBtn').onclick = () => {
+        document.getElementById('discardVeil').classList.remove('open');
+      };
+      document.getElementById('discardGoBtn').onclick = () => {
+        document.getElementById('discardVeil').classList.remove('open');
+        closeModalForced();
+      };
+    }
+
+    function showTactileMenu(btn, id) {
+      document.querySelectorAll('.tactile-popover').forEach(p => p.remove());
+      const t = tickets.find(x => x.id === id);
+      if (!t) return;
+
+      const pop = document.createElement('div');
+      pop.className = 'tactile-popover';
+      pop.style.cssText = 'position:absolute; background:#FFF; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.1); padding:6px; z-index:600; min-width:180px; border:1px solid #E2E8F0;';
+      const lanes = ['backlog', 'todo', 'in_progress', 'done'];
+
+      pop.innerHTML = lanes.map(l => `
+        <div style="padding:8px 12px; font-size:13px; font-weight:600; cursor:pointer; border-radius:8px; display:flex; justify-content:space-between;" class="pop-item" data-lane="${l}">
+          <span>Move to ${l.replace('_', ' ').toUpperCase()}</span>
+          ${t.status === l ? '<span>✓</span>' : ''}
+        </div>
+      `).join('');
+
+      const rect = btn.getBoundingClientRect();
+      pop.style.top = `${rect.bottom + window.scrollY + 4}px`;
+      pop.style.left = `${Math.min(rect.left, window.innerWidth - 190)}px`;
+
+      pop.querySelectorAll('.pop-item').forEach(i => {
+        i.onmouseenter = () => i.style.background = '#EEF2FF';
+        i.onmouseleave = () => i.style.background = 'transparent';
+        i.onclick = () => {
+          relocate(id, i.dataset.lane);
+          pop.remove();
+        };
+      });
+
+      document.body.appendChild(pop);
+      const close = (e) => {
+        if (!pop.contains(e.target) && e.target !== btn) {
+          pop.remove();
+          document.removeEventListener('click', close);
+        }
+      };
+      setTimeout(() => document.addEventListener('click', close), 10);
+    }
+
+    let dragCardId = null;
+    function setupTactileDnd() {
+      document.querySelectorAll('.tactile-card').forEach(c => {
+        c.ondragstart = () => {
+          dragCardId = c.dataset.id;
+          c.classList.add('dragging');
+        };
+        c.ondragend = () => {
+          c.classList.remove('dragging');
+          dragCardId = null;
+        };
+      });
+
+      document.querySelectorAll('.cards-stack').forEach(s => {
+        s.ondragover = (e) => { e.preventDefault(); s.classList.add('drag-hovering'); };
+        s.ondragleave = () => s.classList.remove('drag-hovering');
+        s.ondrop = (e) => {
+          e.preventDefault();
+          s.classList.remove('drag-hovering');
+          if (dragCardId && s.dataset.lane) relocate(dragCardId, s.dataset.lane);
+        };
+      });
+    }
+
+    function relocate(id, lane) {
+      const ticket = tickets.find(t => t.id === id);
+      if (!ticket || ticket.status === lane) return;
+      const prev = ticket.status;
+
+      ticket.status = lane;
+      ticket.updatedAt = new Date().toISOString();
+      persist();
+      render();
+
+      if (simError) {
+        setTimeout(() => {
+          ticket.status = prev;
+          persist();
+          render();
+          pushToast(`Rollback: card ${id} returned to ${prev.toUpperCase()}`, true, () => {
+            relocate(id, lane);
+          });
+        }, 600);
+      } else {
+        pushToast(`Moved ${id} to ${lane.replace('_', ' ').toUpperCase()}`);
+      }
+    }
+
+    function openModal(id = null, lane = 'backlog') {
+      editTicketId = id;
+      dirtyFlag = false;
+      const cur = id ? tickets.find(t => t.id === id) : null;
+
+      document.getElementById('modalTitle').textContent = cur ? `Edit Ticket ${cur.id}` : 'Create Ticket';
+      document.getElementById('fldTitle').value = cur ? cur.title : '';
+      document.getElementById('fldDesc').value = cur ? (cur.description || '') : '';
+      document.getElementById('fldTags').value = cur ? cur.tags.join(', ') : '';
+      document.getElementById('fldStatus').value = cur ? cur.status : lane;
+      document.getElementById('counterSpan').textContent = `${cur ? cur.title.length : 0}/100`;
+      document.getElementById('fldDelete').style.display = cur ? 'inline-block' : 'none';
+      document.getElementById('fldTitleErr').style.display = 'none';
+
+      document.getElementById('modalVeil').classList.add('open');
+      setTimeout(() => document.getElementById('fldTitle').focus(), 100);
+    }
+
+    function tryClose() {
+      if (dirtyFlag) document.getElementById('discardVeil').classList.add('open');
+      else closeModalForced();
+    }
+
+    function closeModalForced() {
+      document.getElementById('modalVeil').classList.remove('open');
+      dirtyFlag = false;
+      editTicketId = null;
+    }
+
+    function saveCard() {
+      const title = document.getElementById('fldTitle').value.trim();
+      if (!title) {
+        document.getElementById('fldTitleErr').style.display = 'block';
+        return;
+      }
+      const status = document.getElementById('fldStatus').value;
+      const desc = document.getElementById('fldDesc').value.trim();
+      const tags = document.getElementById('fldTags').value.split(',').map(s => s.trim().replace(/^#/, '')).filter(Boolean);
+
+      if (editTicketId) {
+        const t = tickets.find(x => x.id === editTicketId);
+        if (t) {
+          t.title = title; t.status = status; t.description = desc; t.tags = tags;
+          t.updatedAt = new Date().toISOString();
+        }
+      } else {
+        tickets.push({
+          id: `TCK-${Math.floor(100 + Math.random() * 900)}`,
+          title, status, description: desc, tags,
+          createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
+        });
+      }
+      persist();
+      closeModalForced();
+      render();
+    }
+
+    function deleteCard() {
+      if (!editTicketId) return;
+      if (confirm(`Remove ticket ${editTicketId}?`)) {
+        tickets = tickets.filter(t => t.id !== editTicketId);
+        persist();
+        closeModalForced();
+        render();
+      }
+    }
+
+    document.getElementById('openDrawerBtn').onclick = () => document.getElementById('sideDrawer').classList.add('open');
+    document.getElementById('closeDrawerBtn').onclick = () => document.getElementById('sideDrawer').classList.remove('open');
+
+    render();
+  </script>
+</body>
+</html>

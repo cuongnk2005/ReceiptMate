@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concept B: Swiss Editorial — 4-Status Ticket Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* CONCEPT B: SWISS EDITORIAL (Warm Gallery Paper & Typographic Elegance) */
+    :root {
+      --bg-page: #F6F5F0;
+      --bg-card: #FFFFFF;
+      --bg-card-hover: #FCFCFA;
+      --border-hairline: #E3E0D8;
+      --border-emphasis: #B8B3A7;
+      --text-ink: #1C1A17;
+      --text-subtle: #6E6A63;
+      --text-faint: #9E998F;
+      --accent-clay: #C25E3E;
+      --accent-cobalt: #2D5B88;
+      --accent-forest: #3E6B48;
+      --accent-charcoal: #2B2824;
+      --font-display: 'Newsreader', Georgia, serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --radius-editorial: 2px; /* Razor sharp architectural corners */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-page);
+      color: var(--text-ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* TOP NOTICE BANNER */
+    .editorial-notice {
+      background: #EFECE4;
+      border-bottom: 1px solid var(--border-hairline);
+      padding: 10px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+    .badge-editorial {
+      background: var(--text-ink);
+      color: #F6F5F0;
+      padding: 3px 8px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .btn-text-link {
+      background: transparent;
+      border: none;
+      color: var(--text-ink);
+      font-size: 12px;
+      text-decoration: underline;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-weight: 600;
+    }
+
+    /* HEADER */
+    .masthead {
+      background: var(--bg-page);
+      border-bottom: 2px solid var(--text-ink);
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .masthead-logo {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 600;
+      font-style: italic;
+      letter-spacing: -0.5px;
+    }
+    .masthead-sub {
+      font-size: 12px;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-left: 12px;
+    }
+    .masthead-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .session-indicator {
+      font-size: 13px;
+      color: var(--text-subtle);
+      border-right: 1px solid var(--border-hairline);
+      padding-right: 16px;
+    }
+    .btn-editorial-primary {
+      background: var(--text-ink);
+      color: #FFFFFF;
+      border: 1px solid var(--text-ink);
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: var(--radius-editorial);
+      transition: all 0.15s;
+    }
+    .btn-editorial-primary:hover {
+      background: #3B3833;
+    }
+    .btn-editorial-outline {
+      background: transparent;
+      color: var(--text-ink);
+      border: 1px solid var(--border-emphasis);
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: var(--radius-editorial);
+    }
+    .btn-editorial-outline:hover {
+      background: #ECE9E1;
+    }
+
+    /* AUTH VIEW */
+    .auth-card-editorial {
+      max-width: 440px;
+      margin: 80px auto;
+      padding: 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      box-shadow: 0 10px 30px rgba(28, 26, 23, 0.05);
+    }
+    .auth-lead {
+      font-family: var(--font-display);
+      font-size: 28px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .auth-subtitle {
+      font-size: 14px;
+      color: var(--text-subtle);
+      margin-bottom: 28px;
+    }
+    .input-field {
+      width: 100%;
+      background: #FAF9F6;
+      border: 1px solid var(--border-hairline);
+      padding: 11px 14px;
+      font-size: 14px;
+      font-family: var(--font-body);
+      color: var(--text-ink);
+      margin-top: 6px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .input-field:focus {
+      border-color: var(--text-ink);
+      background: #FFFFFF;
+    }
+    .field-caption {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      color: var(--text-subtle);
+    }
+
+    /* WORKSPACE BOARD */
+    .workspace-stage {
+      flex: 1;
+      padding: 32px;
+      max-width: 1680px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .stage-heading-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+    .stage-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 400;
+    }
+
+    /* MOBILE SEGMENTED BAR */
+    .editorial-tabs {
+      display: none;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border-hairline);
+    }
+    .tab-pill-editorial {
+      background: transparent;
+      border: none;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-subtle);
+      cursor: pointer;
+      position: relative;
+    }
+    .tab-pill-editorial.active {
+      color: var(--text-ink);
+    }
+    .tab-pill-editorial.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 2px;
+      background: var(--text-ink);
+    }
+
+    /* ARCHITECTURAL COLUMNS */
+    .columns-ensemble {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .column-compartment {
+      background: transparent;
+      border-top: 3px solid var(--text-ink);
+      padding-top: 14px;
+      display: flex;
+      flex-direction: column;
+      min-height: 520px;
+    }
+    .column-compartment[data-lane="backlog"] { border-top-color: var(--text-faint); }
+    .column-compartment[data-lane="todo"] { border-top-color: var(--accent-cobalt); }
+    .column-compartment[data-lane="in_progress"] { border-top-color: var(--accent-clay); }
+    .column-compartment[data-lane="done"] { border-top-color: var(--accent-forest); }
+
+    .compartment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+      padding: 0 4px;
+    }
+    .compartment-label {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .compartment-tally {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 15px;
+      color: var(--text-subtle);
+    }
+
+    .cards-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+      min-height: 140px;
+      padding: 4px;
+    }
+    .cards-flow.drag-active {
+      background: rgba(227, 224, 216, 0.4);
+      outline: 1px dashed var(--border-emphasis);
+    }
+
+    /* CARD STRUCTURE */
+    .sheet-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-editorial);
+      padding: 16px;
+      cursor: grab;
+      box-shadow: 0 1px 3px rgba(28, 26, 23, 0.03);
+      transition: all 0.15s ease;
+      position: relative;
+    }
+    .sheet-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-emphasis);
+      box-shadow: 0 4px 12px rgba(28, 26, 23, 0.06);
+    }
+    .sheet-card:focus-visible {
+      outline: 2px solid var(--text-ink);
+      outline-offset: 2px;
+    }
+    .sheet-card.dragging {
+      opacity: 0.4;
+      border-style: dashed;
+    }
+    .sheet-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .sheet-id {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--text-faint);
+    }
+    .sheet-menu-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--text-faint);
+      padding: 2px 6px;
+      font-size: 14px;
+    }
+    .sheet-menu-btn:hover { color: var(--text-ink); }
+    .sheet-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--text-ink);
+      margin-bottom: 10px;
+    }
+    .sheet-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .editorial-tag {
+      font-size: 11px;
+      padding: 2px 6px;
+      border: 1px solid var(--border-hairline);
+      color: var(--text-subtle);
+      border-radius: 2px;
+    }
+    .doc-indicator {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    /* EMPTY LANE */
+    .editorial-empty {
+      border: 1px dashed var(--border-hairline);
+      padding: 28px 16px;
+      text-align: center;
+      margin: 8px 0;
+      color: var(--text-subtle);
+    }
+    .editorial-empty-txt {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .compartment-footer {
+      margin-top: 14px;
+    }
+    .add-entry-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--border-hairline);
+      color: var(--text-subtle);
+      padding: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .add-entry-btn:hover {
+      background: #FFFFFF;
+      color: var(--text-ink);
+      border-color: var(--text-ink);
+    }
+
+    /* MODAL */
+    .overlay-curtain {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(28, 26, 23, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .overlay-curtain.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .dialog-parchment {
+      background: #FFFFFF;
+      border: 1px solid var(--border-emphasis);
+      width: 90%;
+      max-width: 540px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      border-radius: var(--radius-editorial);
+    }
+    .dialog-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .dialog-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+    }
+    .dialog-content { padding: 24px; }
+    .dialog-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-hairline);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #FAF9F6;
+    }
+
+    /* TOAST */
+    .editorial-toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: var(--text-ink);
+      color: #FFFFFF;
+      padding: 12px 20px;
+      font-size: 13px;
+      border-radius: var(--radius-editorial);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 2000;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    /* POPOVER */
+    .editorial-popover {
+      position: absolute;
+      background: #FFFFFF;
+      border: 1px solid var(--border-emphasis);
+      padding: 6px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      z-index: 600;
+      min-width: 180px;
+    }
+    .editorial-popover-opt {
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .editorial-popover-opt:hover {
+      background: #F6F5F0;
+      font-weight: 600;
+    }
+
+    /* INFO DRAWER */
+    .editorial-drawer {
+      display: none;
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 440px;
+      background: #FAF9F6;
+      border-left: 1px solid var(--border-emphasis);
+      padding: 32px;
+      overflow-y: auto;
+      z-index: 1500;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.08);
+    }
+    .editorial-drawer.is-open { display: block; }
+
+    @media (max-width: 1024px) {
+      .columns-ensemble { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .editorial-tabs { display: flex; }
+      .columns-ensemble { grid-template-columns: 1fr; }
+      .column-compartment { display: none; }
+      .column-compartment.tab-active { display: flex; }
+      .masthead { padding: 16px; }
+      .workspace-stage { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="editorial-notice">
+    <div>
+      <span class="badge-editorial">Concept B</span>
+      <span style="margin-left: 8px; color: var(--text-subtle);"><strong>Swiss Editorial:</strong> Warm gallery paper, serif headlines &amp; architectural hairlines</span>
+    </div>
+    <button class="btn-text-link" id="showRationaleBtn">Inspect Rationale &amp; Risks ↗</button>
+  </div>
+
+  <div id="mountPoint"></div>
+  <div id="toastOutlet"></div>
+
+  <!-- RATIONALE DRAWER -->
+  <div class="editorial-drawer" id="rationaleDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px;">
+      <h3 style="font-family: var(--font-display); font-size: 24px;">Concept B Review</h3>
+      <button class="btn-text-link" id="hideRationaleBtn">Close ✕</button>
+    </div>
+    <div style="margin-bottom: 20px;">
+      <div class="field-caption" style="margin-bottom: 6px;">Design Philosophy</div>
+      <p style="font-size: 14px; color: var(--text-subtle); line-height: 1.6;">
+        Treated like a printed architectural monograph. Embraces warm ivory backgrounds (`#F6F5F0`), deep ink blacks, and serif display titles (`Newsreader`). Minimizes shadow-heavy GUI tropes in favor of spatial tension and clean hairlines.
+      </p>
+    </div>
+    <div style="margin-bottom: 20px;">
+      <div class="field-caption" style="margin-bottom: 6px;">Interaction Risks</div>
+      <p style="font-size: 14px; color: var(--text-subtle); line-height: 1.6;">
+        1. Generous margins and font sizes consume more vertical screen space than compact terminal tables.<br>
+        2. Users accustomed to dark mode may experience glare in dark room settings.
+      </p>
+    </div>
+    <div>
+      <div class="field-caption" style="margin-bottom: 6px;">Contract Fidelity</div>
+      <p style="font-size: 14px; color: var(--text-subtle); line-height: 1.6;">
+        Preserves 100% identical functional parity: 4 statuses, modal validations, drag-and-drop, mobile touch move menu, and simulated rollback on error.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY_SESSION = 'concept_b_session';
+    const STORAGE_KEY_TICKETS = 'concept_b_tickets';
+
+    const INITIAL_TICKETS = [
+      { id: 'TCK-201', title: 'Implement on-device OCR regex parser for VND', description: 'Ensure dots and commas are stripped, normalize 45k to 45000.', status: 'backlog', tags: ['parser', 'core'] },
+      { id: 'TCK-202', title: 'Design fallback Review & Verification screen', description: 'Prevent auto-commit to sqlite without user confirmation.', status: 'backlog', tags: ['ui', 'security'] },
+      { id: 'TCK-203', title: 'Set up sqflite local persistence table schema', description: 'Add indices for transaction_date and category.', status: 'todo', tags: ['database'] },
+      { id: 'TCK-204', title: 'Construct CustomPainter Category Donut chart', description: 'Zero dependency sweep angle animation with easeOutCubic.', status: 'in_progress', tags: ['canvas', 'chart'] },
+      { id: 'TCK-205', title: 'Weekly 7-day bar chart with tooltip feedback', description: 'Bo góc RRect, dynamic y-scale.', status: 'done', tags: ['canvas'] }
+    ];
+
+    let session = JSON.parse(localStorage.getItem(STORAGE_KEY_SESSION) || 'null');
+    let tickets = JSON.parse(localStorage.getItem(STORAGE_KEY_TICKETS) || JSON.stringify(INITIAL_TICKETS));
+    let activeTab = 'backlog';
+    let isFailing = false;
+    let editId = null;
+    let isDirty = false;
+
+    function save() { localStorage.setItem(STORAGE_KEY_TICKETS, JSON.stringify(tickets)); }
+
+    function flashToast(msg, isErr = false, retryFn = null) {
+      const outlet = document.getElementById('toastOutlet');
+      const toast = document.createElement('div');
+      toast.className = 'editorial-toast';
+      if (isErr) toast.style.background = '#8B261E';
+      toast.innerHTML = `<span>${msg}</span>`;
+      if (retryFn) {
+        const btn = document.createElement('button');
+        btn.textContent = 'Retry';
+        btn.style.cssText = 'background:#FFF; color:#000; border:none; padding:2px 8px; font-weight:600; cursor:pointer; margin-left:8px;';
+        btn.onclick = () => { retryFn(); toast.remove(); };
+        toast.appendChild(btn);
+      }
+      outlet.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+
+    function render() {
+      const mount = document.getElementById('mountPoint');
+      if (!session) renderAuth(mount);
+      else renderBoard(mount);
+    }
+
+    function renderAuth(mount) {
+      mount.innerHTML = `
+        <div class="auth-card-editorial">
+          <div class="field-caption">Journal Workspace</div>
+          <h2 class="auth-lead">Sign in to Review Board</h2>
+          <p class="auth-subtitle">Prototype boundary: access your locally persisted desk.</p>
+          <form id="authForm">
+            <div style="margin-bottom: 18px;">
+              <label class="field-caption">User Identifier / Email</label>
+              <input type="text" id="authEmail" class="input-field" placeholder="curator@editorial.design" required>
+            </div>
+            <div style="margin-bottom: 24px;">
+              <label class="field-caption">Passphrase (&ge; 6 characters)</label>
+              <input type="password" id="authPass" class="input-field" placeholder="••••••••" required minlength="6">
+            </div>
+            <button type="submit" class="btn-editorial-primary" style="width:100%;">Enter Journal</button>
+          </form>
+        </div>
+      `;
+      document.getElementById('authForm').onsubmit = (e) => {
+        e.preventDefault();
+        const email = document.getElementById('authEmail').value.trim();
+        session = { user: email || 'editorial_lead' };
+        localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(session));
+        flashToast(`Session initialized for ${session.user}`);
+        render();
+      };
+    }
+
+    function renderBoard(mount) {
+      const lanes = [
+        { id: 'backlog', title: 'Backlog' },
+        { id: 'todo', title: 'To Do' },
+        { id: 'in_progress', title: 'In Progress' },
+        { id: 'done', title: 'Done' }
+      ];
+
+      mount.innerHTML = `
+        <header class="masthead">
+          <div style="display:flex; align-items:baseline;">
+            <span class="masthead-logo">The Working Board</span>
+            <span class="masthead-sub">Issue Index &bull; Concept B</span>
+          </div>
+          <div class="masthead-controls">
+            <span class="session-indicator">${session.user}</span>
+            <button class="btn-editorial-primary" id="globalAddBtn">+ New Ticket</button>
+            <button class="btn-editorial-outline" id="logoutBtn">Leave</button>
+          </div>
+        </header>
+
+        <main class="workspace-stage">
+          <div class="stage-heading-bar">
+            <div>
+              <div class="field-caption">Volume IV</div>
+              <h1 class="stage-title">Sprint Manifest &amp; Work Items</h1>
+            </div>
+            <div>
+              <button id="toggleErrorBtn" class="btn-editorial-outline" style="font-size:12px; ${isFailing ? 'border-color:#C25E3E; color:#C25E3E;' : ''}">
+                Network Simulation: ${isFailing ? 'Failure Active (Rollback)' : 'Normal'}
+              </button>
+            </div>
+          </div>
+
+          <div class="editorial-tabs">
+            ${lanes.map(l => `
+              <button class="tab-pill-editorial ${activeTab === l.id ? 'active' : ''}" data-tab="${l.id}">
+                ${l.title} (${tickets.filter(t => t.status === l.id).length})
+              </button>
+            `).join('')}
+          </div>
+
+          <div class="columns-ensemble">
+            ${lanes.map(l => {
+              const laneTickets = tickets.filter(t => t.status === l.id);
+              return `
+                <section class="column-compartment ${activeTab === l.id ? 'tab-active' : ''}" data-lane="${l.id}">
+                  <div class="compartment-header">
+                    <span class="compartment-label">${l.title}</span>
+                    <span class="compartment-tally">${laneTickets.length} items</span>
+                  </div>
+
+                  <div class="cards-flow" data-lane="${l.id}">
+                    ${laneTickets.length === 0 ? `
+                      <div class="editorial-empty">
+                        <div class="editorial-empty-txt">Quiet in ${l.title}</div>
+                        <button class="btn-editorial-outline lane-empty-add" data-lane="${l.id}" style="font-size:11px; padding:4px 8px;">+ Add Entry</button>
+                      </div>
+                    ` : laneTickets.map(t => `
+                      <article class="sheet-card" draggable="true" data-id="${t.id}" tabindex="0">
+                        <div class="sheet-meta">
+                          <span class="sheet-id">${t.id}</span>
+                          <button class="sheet-menu-btn" data-id="${t.id}">•••</button>
+                        </div>
+                        <h4 class="sheet-title">${escape(t.title)}</h4>
+                        <div class="sheet-footer">
+                          ${t.tags.map(tag => `<span class="editorial-tag">${escape(tag)}</span>`).join('')}
+                          ${t.description ? `<span class="doc-indicator" title="Has notes">¶</span>` : ''}
+                        </div>
+                      </article>
+                    `).join('')}
+                  </div>
+
+                  <div class="compartment-footer">
+                    <button class="add-entry-btn" data-lane="${l.id}">+ Add Ticket</button>
+                  </div>
+                </section>
+              `;
+            }).join('')}
+          </div>
+        </main>
+
+        <!-- DIALOG -->
+        <div class="overlay-curtain" id="ticketCurtain">
+          <div class="dialog-parchment">
+            <div class="dialog-header">
+              <span class="dialog-title" id="curtainTitle">New Ticket</span>
+              <button class="btn-text-link" id="curtainClose">Dismiss</button>
+            </div>
+            <div class="dialog-content">
+              <form id="dialogForm">
+                <div style="margin-bottom: 16px;">
+                  <div style="display:flex; justify-content:space-between;">
+                    <label class="field-caption">Title *</label>
+                    <span id="charNum" style="font-size:11px; color:var(--text-faint);">0/100</span>
+                  </div>
+                  <input type="text" id="dlgTitle" class="input-field" maxlength="100" placeholder="Articulate the task clearly..." required>
+                  <div id="dlgTitleErr" style="color:#C25E3E; font-size:12px; margin-top:4px; display:none;">Title is mandatory.</div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <label class="field-caption">Status Lane</label>
+                  <select id="dlgStatus" class="input-field">
+                    <option value="backlog">Backlog</option>
+                    <option value="todo">To Do</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="done">Done</option>
+                  </select>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <label class="field-caption">Tags</label>
+                  <input type="text" id="dlgTags" class="input-field" placeholder="editorial, typography, review">
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <label class="field-caption">Elaboration (Optional)</label>
+                  <textarea id="dlgDesc" class="input-field" rows="4" placeholder="Detailed notes..."></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="dialog-footer">
+              <button type="button" class="btn-editorial-outline" id="dlgDelete" style="color:#C25E3E; border-color:#C25E3E; display:none;">Delete</button>
+              <div style="display:flex; gap:10px; margin-left:auto;">
+                <button type="button" class="btn-editorial-outline" id="dlgCancel">Cancel</button>
+                <button type="button" class="btn-editorial-primary" id="dlgSave">Save Entry</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DISCARD WARNING -->
+        <div class="overlay-curtain" id="discardCurtain">
+          <div class="dialog-parchment" style="max-width:380px; padding:24px;">
+            <h4 class="dialog-title" style="font-size:18px; margin-bottom:8px;">Discard draft?</h4>
+            <p style="font-size:13px; color:var(--text-subtle); margin-bottom:20px;">Uncommitted inputs will be removed.</p>
+            <div style="display:flex; justify-content:flex-end; gap:8px;">
+              <button class="btn-editorial-outline" id="keepEditingBtn">Keep Editing</button>
+              <button class="btn-editorial-primary" id="confirmDiscardBtn" style="background:#C25E3E;">Discard</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      wireEvents();
+    }
+
+    function escape(s) {
+      if (!s) return '';
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function wireEvents() {
+      document.getElementById('logoutBtn').onclick = () => {
+        session = null;
+        localStorage.removeItem(STORAGE_KEY_SESSION);
+        render();
+      };
+
+      document.getElementById('toggleErrorBtn').onclick = () => {
+        isFailing = !isFailing;
+        render();
+      };
+
+      document.querySelectorAll('.tab-pill-editorial').forEach(b => {
+        b.onclick = () => { activeTab = b.dataset.tab; render(); };
+      });
+
+      document.getElementById('globalAddBtn').onclick = () => openDialog(null, 'backlog');
+      document.querySelectorAll('.add-entry-btn, .lane-empty-add').forEach(b => {
+        b.onclick = () => openDialog(null, b.dataset.lane);
+      });
+
+      document.querySelectorAll('.sheet-card').forEach(c => {
+        c.onclick = (e) => {
+          if (e.target.classList.contains('sheet-menu-btn')) return;
+          openDialog(c.dataset.id);
+        };
+        c.onkeydown = (e) => {
+          if (e.key === 'Enter') openDialog(c.dataset.id);
+        };
+      });
+
+      document.querySelectorAll('.sheet-menu-btn').forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          showMenu(btn, btn.dataset.id);
+        };
+      });
+
+      setupDnd();
+
+      document.getElementById('curtainClose').onclick = attemptClose;
+      document.getElementById('dlgCancel').onclick = attemptClose;
+      document.getElementById('dlgSave').onclick = saveTicket;
+      document.getElementById('dlgDelete').onclick = deleteTicket;
+
+      document.getElementById('dlgTitle').oninput = (e) => {
+        isDirty = true;
+        document.getElementById('charNum').textContent = `${e.target.value.length}/100`;
+      };
+      document.getElementById('dlgDesc').oninput = () => isDirty = true;
+      document.getElementById('dlgTags').oninput = () => isDirty = true;
+      document.getElementById('dlgStatus').onchange = () => isDirty = true;
+
+      document.getElementById('keepEditingBtn').onclick = () => {
+        document.getElementById('discardCurtain').classList.remove('is-open');
+      };
+      document.getElementById('confirmDiscardBtn').onclick = () => {
+        document.getElementById('discardCurtain').classList.remove('is-open');
+        closeDialogForced();
+      };
+    }
+
+    function showMenu(btn, ticketId) {
+      document.querySelectorAll('.editorial-popover').forEach(p => p.remove());
+      const ticket = tickets.find(t => t.id === ticketId);
+      if (!ticket) return;
+
+      const popover = document.createElement('div');
+      popover.className = 'editorial-popover';
+      const lanes = ['backlog', 'todo', 'in_progress', 'done'];
+      popover.innerHTML = lanes.map(l => `
+        <div class="editorial-popover-opt" data-lane="${l}">
+          Move to ${l.replace('_', ' ').toUpperCase()} ${ticket.status === l ? '✓' : ''}
+        </div>
+      `).join('');
+
+      const rect = btn.getBoundingClientRect();
+      popover.style.top = `${rect.bottom + window.scrollY + 4}px`;
+      popover.style.left = `${Math.min(rect.left, window.innerWidth - 190)}px`;
+
+      popover.querySelectorAll('.editorial-popover-opt').forEach(opt => {
+        opt.onclick = () => {
+          shiftTicket(ticketId, opt.dataset.lane);
+          popover.remove();
+        };
+      });
+
+      document.body.appendChild(popover);
+      const close = (e) => {
+        if (!popover.contains(e.target) && e.target !== btn) {
+          popover.remove();
+          document.removeEventListener('click', close);
+        }
+      };
+      setTimeout(() => document.addEventListener('click', close), 10);
+    }
+
+    let dragId = null;
+    function setupDnd() {
+      document.querySelectorAll('.sheet-card').forEach(c => {
+        c.ondragstart = (e) => {
+          dragId = c.dataset.id;
+          c.classList.add('dragging');
+        };
+        c.ondragend = () => {
+          c.classList.remove('dragging');
+          dragId = null;
+        };
+      });
+
+      document.querySelectorAll('.cards-flow').forEach(f => {
+        f.ondragover = (e) => { e.preventDefault(); f.classList.add('drag-active'); };
+        f.ondragleave = () => f.classList.remove('drag-active');
+        f.ondrop = (e) => {
+          e.preventDefault();
+          f.classList.remove('drag-active');
+          if (dragId && f.dataset.lane) shiftTicket(dragId, f.dataset.lane);
+        };
+      });
+    }
+
+    function shiftTicket(id, targetLane) {
+      const ticket = tickets.find(t => t.id === id);
+      if (!ticket || ticket.status === targetLane) return;
+      const prior = ticket.status;
+
+      ticket.status = targetLane;
+      ticket.updatedAt = new Date().toISOString();
+      save();
+      render();
+
+      if (isFailing) {
+        setTimeout(() => {
+          ticket.status = prior;
+          save();
+          render();
+          flashToast(`Rollback: returned ${ticket.id} to ${prior.toUpperCase()}`, true, () => {
+            shiftTicket(id, targetLane);
+          });
+        }, 600);
+      } else {
+        flashToast(`Shifted ${ticket.id} to ${targetLane.replace('_', ' ').toUpperCase()}`);
+      }
+    }
+
+    function openDialog(id = null, lane = 'backlog') {
+      editId = id;
+      isDirty = false;
+      const cur = id ? tickets.find(t => t.id === id) : null;
+
+      document.getElementById('curtainTitle').textContent = cur ? `Revise ${cur.id}` : 'Create Ticket';
+      document.getElementById('dlgTitle').value = cur ? cur.title : '';
+      document.getElementById('dlgDesc').value = cur ? (cur.description || '') : '';
+      document.getElementById('dlgTags').value = cur ? cur.tags.join(', ') : '';
+      document.getElementById('dlgStatus').value = cur ? cur.status : lane;
+      document.getElementById('charNum').textContent = `${cur ? cur.title.length : 0}/100`;
+      document.getElementById('dlgDelete').style.display = cur ? 'inline-block' : 'none';
+      document.getElementById('dlgTitleErr').style.display = 'none';
+
+      document.getElementById('ticketCurtain').classList.add('is-open');
+      setTimeout(() => document.getElementById('dlgTitle').focus(), 100);
+    }
+
+    function attemptClose() {
+      if (isDirty) document.getElementById('discardCurtain').classList.add('is-open');
+      else closeDialogForced();
+    }
+
+    function closeDialogForced() {
+      document.getElementById('ticketCurtain').classList.remove('is-open');
+      isDirty = false;
+      editId = null;
+    }
+
+    function saveTicket() {
+      const title = document.getElementById('dlgTitle').value.trim();
+      if (!title) {
+        document.getElementById('dlgTitleErr').style.display = 'block';
+        return;
+      }
+
+      const status = document.getElementById('dlgStatus').value;
+      const desc = document.getElementById('dlgDesc').value.trim();
+      const tags = document.getElementById('dlgTags').value.split(',').map(s => s.trim().replace(/^#/, '')).filter(Boolean);
+
+      if (editId) {
+        const t = tickets.find(x => x.id === editId);
+        if (t) {
+          t.title = title;
+          t.status = status;
+          t.description = desc;
+          t.tags = tags;
+          t.updatedAt = new Date().toISOString();
+        }
+      } else {
+        tickets.push({
+          id: `TCK-${Math.floor(100 + Math.random() * 900)}`,
+          title, status, description: desc, tags,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        });
+      }
+      save();
+      closeDialogForced();
+      render();
+    }
+
+    function deleteTicket() {
+      if (!editId) return;
+      if (confirm(`Remove ticket ${editId}?`)) {
+        tickets = tickets.filter(t => t.id !== editId);
+        save();
+        closeDialogForced();
+        render();
+      }
+    }
+
+    document.getElementById('showRationaleBtn').onclick = () => document.getElementById('rationaleDrawer').classList.add('is-open');
+    document.getElementById('hideRationaleBtn').onclick = () => document.getElementById('rationaleDrawer').classList.remove('is-open');
+
+    render();
+  </script>
+</body>
+</html>

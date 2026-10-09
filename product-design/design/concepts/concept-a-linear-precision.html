@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concept A: Linear Precision — 4-Status Ticket Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* CONCEPT A: LINEAR PRECISION (Dark Monospace & High-Density Technical) */
+    :root {
+      --bg-canvas: #090D16;
+      --bg-surface: #111726;
+      --bg-surface-elevated: #182032;
+      --bg-surface-active: #202B42;
+      --border-subtle: #1E293B;
+      --border-prominent: #334155;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+      --accent-primary: #6366F1;
+      --accent-primary-hover: #4F46E5;
+      --status-backlog: #64748B;
+      --status-todo: #38BDF8;
+      --status-in-progress: #F59E0B;
+      --status-done: #10B981;
+      --font-ui: 'Inter', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-ui);
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* RATIONALE BANNER */
+    .concept-banner {
+      background: #0E131F;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .concept-tag {
+      background: rgba(99, 102, 241, 0.15);
+      color: #A5B4FC;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .concept-info-btn {
+      background: transparent;
+      border: 1px solid var(--border-prominent);
+      color: var(--text-main);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .concept-info-btn:hover { background: var(--bg-surface-elevated); }
+
+    /* APP HEADER */
+    .app-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--accent-primary), #4338CA);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 14px;
+      color: white;
+    }
+    .brand-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      outline: none;
+    }
+    .btn:focus-visible {
+      box-shadow: 0 0 0 2px var(--bg-canvas), 0 0 0 4px var(--accent-primary);
+    }
+    .btn-primary {
+      background: var(--accent-primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--accent-primary-hover); }
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border-prominent);
+      color: var(--text-main);
+    }
+    .btn-outline:hover { background: var(--bg-surface-elevated); }
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #F87171;
+    }
+    .btn-danger:hover { background: rgba(239, 68, 68, 0.2); }
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      padding: 6px 12px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #10B981;
+      border-radius: 50%;
+    }
+
+    /* AUTH VIEW */
+    .auth-container {
+      max-width: 400px;
+      margin: 80px auto;
+      padding: 32px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .auth-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .auth-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-input {
+      width: 100%;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-prominent);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      padding: 9px 12px;
+      font-size: 14px;
+      font-family: var(--font-ui);
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .form-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    }
+    .form-input.is-error {
+      border-color: #EF4444;
+    }
+    .form-error {
+      color: #EF4444;
+      font-size: 11px;
+      margin-top: 4px;
+      font-family: var(--font-mono);
+    }
+    .auth-toggle {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .auth-toggle a {
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* BOARD VIEW */
+    .board-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .board-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .board-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .board-name {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .ticket-total {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: var(--bg-surface-elevated);
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+    .simulate-error-btn {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      padding: 6px 10px;
+      border: 1px dashed var(--border-prominent);
+      background: transparent;
+      color: var(--text-dim);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+    .simulate-error-btn.active {
+      border-color: #EF4444;
+      color: #EF4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* SEGMENTED TAB SWITCHER (FOR MOBILE NARROW-VIEW) */
+    .lane-tabs {
+      display: none;
+      margin-bottom: 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      gap: 4px;
+    }
+    .lane-tab-btn {
+      flex: 1;
+      padding: 8px 4px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .lane-tab-btn.active {
+      background: var(--bg-surface-active);
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* FOUR LANES GRID */
+    .lanes-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      flex: 1;
+      align-items: start;
+    }
+    .lane-col {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 180px);
+      min-height: 480px;
+    }
+    .lane-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .lane-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lane-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+    .indicator-backlog { background: var(--status-backlog); }
+    .indicator-todo { background: var(--status-todo); }
+    .indicator-in_progress { background: var(--status-in-progress); }
+    .indicator-done { background: var(--status-done); }
+
+    .lane-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+    .lane-count {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--bg-canvas);
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+    }
+    .lane-cards-list {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+      overflow-y: auto;
+      min-height: 120px;
+    }
+    .lane-cards-list.drag-over {
+      background: rgba(99, 102, 241, 0.05);
+      border: 1px dashed var(--accent-primary);
+    }
+
+    /* CARD COMPONENT */
+    .ticket-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      cursor: grab;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+      position: relative;
+    }
+    .ticket-card:hover {
+      border-color: var(--border-prominent);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .ticket-card:focus-visible {
+      outline: 2px solid var(--accent-primary);
+      outline-offset: 2px;
+    }
+    .ticket-card.dragging {
+      opacity: 0.4;
+      cursor: grabbing;
+      border-style: dashed;
+    }
+    .card-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .card-id {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+    .card-actions-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      line-height: 1;
+    }
+    .card-actions-btn:hover {
+      background: var(--bg-surface-active);
+      color: var(--text-main);
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+      line-height: 1.4;
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+    }
+    .tag-pill {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: rgba(148, 163, 184, 0.1);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+    }
+    .has-desc-icon {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* EMPTY LANE STATE */
+    .lane-empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      text-align: center;
+      border: 1px dashed var(--border-subtle);
+      border-radius: var(--radius-sm);
+      margin: 10px 0;
+      color: var(--text-dim);
+    }
+    .lane-empty-icon {
+      font-size: 20px;
+      margin-bottom: 6px;
+      opacity: 0.5;
+    }
+    .lane-empty-text {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      margin-bottom: 12px;
+    }
+
+    .lane-footer {
+      padding: 10px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .lane-add-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px dashed var(--border-prominent);
+      color: var(--text-muted);
+      padding: 8px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .lane-add-btn:hover {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border-color: var(--accent-primary);
+    }
+
+    /* MODAL SYSTEM */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .modal-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-prominent);
+      border-radius: var(--radius-md);
+      width: 90%;
+      max-width: 520px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      transform: scale(0.96);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-backdrop.is-open .modal-card {
+      transform: scale(1);
+    }
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title {
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .modal-body {
+      padding: 20px;
+    }
+    .modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-footer-right {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* QUICK MOVE POPUP */
+    .quick-move-popover {
+      position: absolute;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-prominent);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      z-index: 500;
+      padding: 6px;
+      min-width: 170px;
+    }
+    .popover-item {
+      padding: 6px 10px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--text-main);
+      cursor: pointer;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .popover-item:hover {
+      background: var(--bg-surface-active);
+      color: var(--accent-primary);
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 2000;
+    }
+    .toast {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-prominent);
+      border-left: 3px solid var(--accent-primary);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideIn 0.2s ease;
+    }
+    .toast.is-error {
+      border-left-color: #EF4444;
+    }
+    .toast-retry-btn {
+      background: transparent;
+      border: 1px solid var(--accent-primary);
+      color: var(--accent-primary);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      padding: 2px 6px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    /* INFO DRAWER */
+    .info-modal {
+      display: none;
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 420px;
+      background: #0D121F;
+      border-left: 1px solid var(--border-prominent);
+      z-index: 1500;
+      padding: 24px;
+      overflow-y: auto;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.6);
+    }
+    .info-modal.is-open { display: block; }
+    .info-section { margin-bottom: 20px; }
+    .info-heading { font-size: 12px; font-family: var(--font-mono); color: #818CF8; text-transform: uppercase; margin-bottom: 8px; }
+    .info-p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* RESPONSIVE NARROW VIEW */
+    @media (max-width: 1024px) {
+      .lanes-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .lane-tabs { display: flex; }
+      .lanes-grid {
+        grid-template-columns: 1fr;
+      }
+      .lane-col {
+        display: none;
+      }
+      .lane-col.is-active-tab {
+        display: flex;
+      }
+      .app-header { padding: 12px 16px; }
+      .board-container { padding: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CONCEPT A RATIONALE BANNER -->
+  <div class="concept-banner">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span class="concept-tag">CONCEPT A</span>
+      <span><strong>Linear Precision:</strong> Dark Monospace &amp; High-Density Technical</span>
+    </div>
+    <button class="concept-info-btn" id="openRationaleBtn">
+      <span>⚙️ View Rationale &amp; Risks</span>
+    </button>
+  </div>
+
+  <!-- MAIN APP CONTAINER -->
+  <div id="appRoot">
+    <!-- View will be injected by JavaScript: Auth View or Board View -->
+  </div>
+
+  <!-- TOAST ROOT -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- CONCEPT RATIONALE DRAWER -->
+  <div class="info-modal" id="infoDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h3 style="font-size: 16px; font-family: var(--font-mono);">Concept A: Design Review</h3>
+      <button class="btn btn-outline" style="padding: 4px 8px;" id="closeRationaleBtn">✕</button>
+    </div>
+    <div class="info-section">
+      <div class="info-heading">Design Rationale</div>
+      <p class="info-p">
+        Inspired by modern engineering tools (Linear, Raycast). Utilizes a deep zinc-slate palette (`#090D16`), sharp 1px borders, and monospace meta-labels (`JetBrains Mono`). Focuses on maximum information density, low optical glare, and keyboard-centric velocity.
+      </p>
+    </div>
+    <div class="info-section">
+      <div class="info-heading">Interaction Risks</div>
+      <p class="info-p">
+        1. Low contrast on low-grade mobile displays if ambient sunlight is high.<br>
+        2. Power-user dark styling may feel intimidating to non-technical collaborators (marketing/content).
+      </p>
+    </div>
+    <div class="info-section">
+      <div class="info-heading">Review Notes</div>
+      <p class="info-p">
+        - Preserves 100% of the single-interaction contract: 4 fixed statuses, modal validation, drag/touch/keyboard movement, rollback retry.<br>
+        - Notice the Segmented Tab switcher on screen widths &lt; 768px.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // --- STATE MANAGEMENT ---
+    const STORAGE_KEY_SESSION = 'concept_a_session';
+    const STORAGE_KEY_TICKETS = 'concept_a_tickets';
+
+    const INITIAL_TICKETS = [
+      { id: 'TCK-101', title: 'Implement on-device OCR regex parser for VND', description: 'Ensure dots and commas are stripped, normalize 45k to 45000.', status: 'backlog', tags: ['parser', 'core'] },
+      { id: 'TCK-102', title: 'Design fallback Review & Verification screen', description: 'Prevent auto-commit to sqlite without user confirmation.', status: 'backlog', tags: ['ui', 'security'] },
+      { id: 'TCK-103', title: 'Set up sqflite local persistence table schema', description: 'Add indices for transaction_date and category.', status: 'todo', tags: ['database'] },
+      { id: 'TCK-104', title: 'Construct CustomPainter Category Donut chart', description: 'Zero dependency sweep angle animation with easeOutCubic.', status: 'in_progress', tags: ['canvas', 'chart'] },
+      { id: 'TCK-105', title: 'Weekly 7-day bar chart with tooltip feedback', description: 'Bo góc RRect, dynamic y-scale.', status: 'done', tags: ['canvas'] }
+    ];
+
+    let session = JSON.parse(localStorage.getItem(STORAGE_KEY_SESSION) || 'null');
+    let tickets = JSON.parse(localStorage.getItem(STORAGE_KEY_TICKETS) || JSON.stringify(INITIAL_TICKETS));
+    let activeMobileTab = 'backlog';
+    let simulateFailure = false;
+    let editingTicketId = null;
+    let pendingCreateLane = 'backlog';
+    let isDraftDirty = false;
+
+    function saveTickets() {
+      localStorage.setItem(STORAGE_KEY_TICKETS, JSON.stringify(tickets));
+    }
+
+    function showToast(message, isError = false, actionText = null, actionCallback = null) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${isError ? 'is-error' : ''}`;
+      toast.innerHTML = `<span>${message}</span>`;
+      
+      if (actionText && actionCallback) {
+        const btn = document.createElement('button');
+        btn.className = 'toast-retry-btn';
+        btn.textContent = actionText;
+        btn.onclick = () => {
+          actionCallback();
+          toast.remove();
+        };
+        toast.appendChild(btn);
+      }
+      
+      container.appendChild(toast);
+      setTimeout(() => { toast.remove(); }, 4000);
+    }
+
+    // --- RENDER ROUTER ---
+    function render() {
+      const root = document.getElementById('appRoot');
+      if (!session) {
+        renderAuthView(root);
+      } else {
+        renderBoardView(root);
+      }
+    }
+
+    // --- AUTH VIEW ---
+    function renderAuthView(root) {
+      root.innerHTML = `
+        <div class="auth-container">
+          <div class="brand-group" style="margin-bottom: 16px;">
+            <div class="brand-logo">A</div>
+            <div class="brand-title">Linear Precision Board</div>
+          </div>
+          <h2 class="auth-title">Authentication Prototype</h2>
+          <p class="auth-desc">Enter mock credentials to enter the local session boundary.</p>
+          
+          <form id="authForm">
+            <div class="form-group">
+              <label class="form-label">Username / Email</label>
+              <input type="text" id="authEmail" class="form-input" placeholder="developer@linear.internal" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Password (&ge; 6 characters)</label>
+              <input type="password" id="authPassword" class="form-input" placeholder="••••••••" required minlength="6">
+              <div id="authError" class="form-error" style="display:none;">Password must be at least 6 characters.</div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In to Workspace</button>
+          </form>
+          <div class="auth-toggle">
+            <span>Prototype boundary: data saved locally in browser.</span>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('authForm').onsubmit = (e) => {
+        e.preventDefault();
+        const email = document.getElementById('authEmail').value.trim();
+        const pass = document.getElementById('authPassword').value;
+        if (pass.length < 6) {
+          document.getElementById('authError').style.display = 'block';
+          return;
+        }
+        session = { user: email || 'lead_engineer', token: 'mock_token_' + Date.now() };
+        localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(session));
+        showToast(`Welcome back, ${session.user}`);
+        render();
+      };
+    }
+
+    // --- BOARD VIEW ---
+    function renderBoardView(root) {
+      const lanes = [
+        { id: 'backlog', name: 'Backlog', color: 'var(--status-backlog)', indicator: 'indicator-backlog' },
+        { id: 'todo', name: 'To Do', color: 'var(--status-todo)', indicator: 'indicator-todo' },
+        { id: 'in_progress', name: 'In Progress', color: 'var(--status-in-progress)', indicator: 'indicator-in_progress' },
+        { id: 'done', name: 'Done', color: 'var(--status-done)', indicator: 'indicator-done' }
+      ];
+
+      root.innerHTML = `
+        <header class="app-header">
+          <div class="brand-group">
+            <div class="brand-logo">A</div>
+            <div>
+              <div class="brand-title">Engineering Sprint Board</div>
+              <div style="font-size: 11px; font-family: var(--font-mono); color: var(--text-dim);">Concept A &bull; Dark Monospace</div>
+            </div>
+          </div>
+          <div class="header-actions">
+            <div class="user-pill">
+              <span class="status-dot"></span>
+              <span>${session.user}</span>
+            </div>
+            <button class="btn btn-primary" id="globalCreateBtn">+ New Ticket</button>
+            <button class="btn btn-outline" id="signOutBtn" title="Sign Out">Sign Out</button>
+          </div>
+        </header>
+
+        <main class="board-container">
+          <div class="board-toolbar">
+            <div class="board-meta">
+              <span class="board-name">Sprint 42 Flow</span>
+              <span class="ticket-total">${tickets.length} tickets total</span>
+            </div>
+            <div>
+              <button id="toggleSimulateError" class="simulate-error-btn ${simulateFailure ? 'active' : ''}">
+                Simulate Network Error: ${simulateFailure ? 'ON (Will Rollback)' : 'OFF'}
+              </button>
+            </div>
+          </div>
+
+          <!-- NARROW MOBILE TABS -->
+          <div class="lane-tabs">
+            ${lanes.map(l => `
+              <button class="lane-tab-btn ${activeMobileTab === l.id ? 'active' : ''}" data-tab="${l.id}">
+                ${l.name} (${tickets.filter(t => t.status === l.id).length})
+              </button>
+            `).join('')}
+          </div>
+
+          <!-- LANES GRID -->
+          <div class="lanes-grid">
+            ${lanes.map(l => {
+              const laneTickets = tickets.filter(t => t.status === l.id);
+              const isActiveMobile = activeMobileTab === l.id;
+              return `
+                <section class="lane-col ${isActiveMobile ? 'is-active-tab' : ''}" data-lane="${l.id}">
+                  <div class="lane-header">
+                    <div class="lane-title-group">
+                      <span class="lane-indicator ${l.indicator}"></span>
+                      <h3 class="lane-title">${l.name}</h3>
+                    </div>
+                    <span class="lane-count">${laneTickets.length}</span>
+                  </div>
+
+                  <div class="lane-cards-list" data-lane="${l.id}">
+                    ${laneTickets.length === 0 ? `
+                      <div class="lane-empty-state">
+                        <div class="lane-empty-icon">◻</div>
+                        <div class="lane-empty-text">No tickets in ${l.name}</div>
+                        <button class="btn btn-outline lane-empty-add-btn" data-lane="${l.id}" style="padding: 4px 8px; font-size: 11px;">+ Add Ticket</button>
+                      </div>
+                    ` : laneTickets.map(t => renderCardHtml(t)).join('')}
+                  </div>
+
+                  <div class="lane-footer">
+                    <button class="lane-add-btn" data-lane="${l.id}">
+                      <span>+</span>
+                      <span>Add ticket</span>
+                    </button>
+                  </div>
+                </section>
+              `;
+            }).join('')}
+          </div>
+        </main>
+
+        <!-- CREATE / EDIT MODAL -->
+        <div class="modal-backdrop" id="ticketModalBackdrop">
+          <div class="modal-card">
+            <div class="modal-header">
+              <span class="modal-title" id="modalHeading">New Ticket</span>
+              <button class="modal-close-btn" id="modalCloseBtn">✕</button>
+            </div>
+            <div class="modal-body">
+              <form id="ticketForm">
+                <div class="form-group">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <label class="form-label">Ticket Title *</label>
+                    <span id="charCount" style="font-size:10px; font-family:var(--font-mono); color:var(--text-dim);">0/100</span>
+                  </div>
+                  <input type="text" id="modalTitleInput" class="form-input" maxlength="100" placeholder="e.g. Implement offline OCR fallback" required>
+                  <div id="modalTitleError" class="form-error" style="display:none;">Title is required.</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Status Lane</label>
+                  <select id="modalStatusSelect" class="form-input">
+                    <option value="backlog">Backlog</option>
+                    <option value="todo">To Do</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="done">Done</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Tags (comma or Enter separated)</label>
+                  <input type="text" id="modalTagsInput" class="form-input" placeholder="ocr, parser, ui">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Description (Optional)</label>
+                  <textarea id="modalDescInput" class="form-input" rows="4" placeholder="Add technical acceptance criteria, steps, or notes..."></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <div>
+                <button type="button" class="btn btn-danger" id="modalDeleteBtn" style="display:none;">Delete</button>
+              </div>
+              <div class="modal-footer-right">
+                <button type="button" class="btn btn-outline" id="modalCancelBtn">Cancel</button>
+                <button type="button" class="btn btn-primary" id="modalSaveBtn">Save Ticket</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DRAFT DISCARD CONFIRMATION MODAL -->
+        <div class="modal-backdrop" id="discardModalBackdrop">
+          <div class="modal-card" style="max-width: 400px;">
+            <div class="modal-header">
+              <span class="modal-title" style="color: #F87171;">Discard Unsaved Changes?</span>
+            </div>
+            <div class="modal-body">
+              <p style="font-size: 13px; color: var(--text-muted);">You have uncommitted modifications. Discarding will lose your changes.</p>
+            </div>
+            <div class="modal-footer" style="justify-content: flex-end; gap: 8px;">
+              <button class="btn btn-outline" id="discardKeepEditingBtn">Keep Editing</button>
+              <button class="btn btn-danger" id="discardConfirmBtn">Discard</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      attachBoardEvents();
+    }
+
+    function renderCardHtml(ticket) {
+      return `
+        <div class="ticket-card" draggable="true" data-id="${ticket.id}" tabindex="0" role="article" aria-label="${ticket.title}">
+          <div class="card-meta-row">
+            <span class="card-id">${ticket.id}</span>
+            <button class="card-actions-btn" data-id="${ticket.id}" title="Quick Move / Actions">•••</button>
+          </div>
+          <div class="card-title">${escapeHtml(ticket.title)}</div>
+          <div class="card-tags">
+            ${ticket.tags.map(t => `<span class="tag-pill">#${escapeHtml(t)}</span>`).join('')}
+            ${ticket.description ? `<span class="has-desc-icon" title="Has description">≡</span>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // --- EVENT WIRING ---
+    function attachBoardEvents() {
+      // Sign out
+      document.getElementById('signOutBtn').onclick = () => {
+        session = null;
+        localStorage.removeItem(STORAGE_KEY_SESSION);
+        render();
+      };
+
+      // Toggle simulated failure
+      document.getElementById('toggleSimulateError').onclick = () => {
+        simulateFailure = !simulateFailure;
+        document.getElementById('toggleSimulateError').classList.toggle('active', simulateFailure);
+        document.getElementById('toggleSimulateError').textContent = `Simulate Network Error: ${simulateFailure ? 'ON (Will Rollback)' : 'OFF'}`;
+      };
+
+      // Mobile tab clicks
+      document.querySelectorAll('.lane-tab-btn').forEach(btn => {
+        btn.onclick = () => {
+          activeMobileTab = btn.getAttribute('data-tab');
+          render();
+        };
+      });
+
+      // Global create button
+      document.getElementById('globalCreateBtn').onclick = () => {
+        openModalForCreate('backlog');
+      };
+
+      // Lane add buttons
+      document.querySelectorAll('.lane-add-btn, .lane-empty-add-btn').forEach(btn => {
+        btn.onclick = () => {
+          const lane = btn.getAttribute('data-lane');
+          openModalForCreate(lane);
+        };
+      });
+
+      // Ticket clicks (Edit)
+      document.querySelectorAll('.ticket-card').forEach(card => {
+        card.onclick = (e) => {
+          if (e.target.classList.contains('card-actions-btn')) return;
+          const id = card.getAttribute('data-id');
+          openModalForEdit(id);
+        };
+
+        // Keyboard navigation
+        card.onkeydown = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const id = card.getAttribute('data-id');
+            openModalForEdit(id);
+          }
+        };
+      });
+
+      // Card quick move (•••)
+      document.querySelectorAll('.card-actions-btn').forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
+          showQuickMovePopover(btn, id);
+        };
+      });
+
+      // Drag and Drop
+      setupDragAndDrop();
+
+      // Modal buttons
+      document.getElementById('modalCloseBtn').onclick = handleModalCloseAttempt;
+      document.getElementById('modalCancelBtn').onclick = handleModalCloseAttempt;
+      document.getElementById('modalSaveBtn').onclick = handleSaveTicket;
+      document.getElementById('modalDeleteBtn').onclick = handleDeleteTicket;
+
+      document.getElementById('modalTitleInput').oninput = (e) => {
+        isDraftDirty = true;
+        document.getElementById('charCount').textContent = `${e.target.value.length}/100`;
+      };
+      document.getElementById('modalDescInput').oninput = () => { isDraftDirty = true; };
+      document.getElementById('modalTagsInput').oninput = () => { isDraftDirty = true; };
+      document.getElementById('modalStatusSelect').onchange = () => { isDraftDirty = true; };
+
+      // Discard modal buttons
+      document.getElementById('discardKeepEditingBtn').onclick = () => {
+        document.getElementById('discardModalBackdrop').classList.remove('is-open');
+      };
+      document.getElementById('discardConfirmBtn').onclick = () => {
+        document.getElementById('discardModalBackdrop').classList.remove('is-open');
+        forceCloseModal();
+      };
+    }
+
+    // --- QUICK MOVE POPOVER ---
+    function showQuickMovePopover(triggerBtn, ticketId) {
+      const existing = document.querySelector('.quick-move-popover');
+      if (existing) existing.remove();
+
+      const ticket = tickets.find(t => t.id === ticketId);
+      if (!ticket) return;
+
+      const popover = document.createElement('div');
+      popover.className = 'quick-move-popover';
+      const lanes = [
+        { id: 'backlog', name: 'Move to Backlog' },
+        { id: 'todo', name: 'Move to To Do' },
+        { id: 'in_progress', name: 'Move to In Progress' },
+        { id: 'done', name: 'Move to Done' }
+      ];
+
+      popover.innerHTML = lanes.map(l => `
+        <div class="popover-item" data-lane="${l.id}">
+          <span>→</span>
+          <span>${l.name}</span>
+          ${ticket.status === l.id ? '<span>✓</span>' : ''}
+        </div>
+      `).join('');
+
+      const rect = triggerBtn.getBoundingClientRect();
+      popover.style.top = `${rect.bottom + window.scrollY + 4}px`;
+      popover.style.left = `${Math.min(rect.left, window.innerWidth - 180)}px`;
+
+      popover.querySelectorAll('.popover-item').forEach(item => {
+        item.onclick = () => {
+          const targetLane = item.getAttribute('data-lane');
+          moveTicket(ticketId, targetLane);
+          popover.remove();
+        };
+      });
+
+      document.body.appendChild(popover);
+      const closeHandler = (e) => {
+        if (!popover.contains(e.target) && e.target !== triggerBtn) {
+          popover.remove();
+          document.removeEventListener('click', closeHandler);
+        }
+      };
+      setTimeout(() => document.addEventListener('click', closeHandler), 10);
+    }
+
+    // --- DRAG AND DROP ---
+    let draggedTicketId = null;
+
+    function setupDragAndDrop() {
+      document.querySelectorAll('.ticket-card').forEach(card => {
+        card.ondragstart = (e) => {
+          draggedTicketId = card.getAttribute('data-id');
+          card.classList.add('dragging');
+          e.dataTransfer.setData('text/plain', draggedTicketId);
+        };
+        card.ondragend = () => {
+          card.classList.remove('dragging');
+          draggedTicketId = null;
+        };
+      });
+
+      document.querySelectorAll('.lane-cards-list').forEach(list => {
+        list.ondragover = (e) => {
+          e.preventDefault();
+          list.classList.add('drag-over');
+        };
+        list.ondragleave = () => {
+          list.classList.remove('drag-over');
+        };
+        list.ondrop = (e) => {
+          e.preventDefault();
+          list.classList.remove('drag-over');
+          const laneId = list.getAttribute('data-lane');
+          if (draggedTicketId && laneId) {
+            moveTicket(draggedTicketId, laneId);
+          }
+        };
+      });
+    }
+
+    // --- MOVEMENT ENGINE (OPTIMISTIC UI + ROLLBACK) ---
+    function moveTicket(ticketId, targetLane) {
+      const ticket = tickets.find(t => t.id === ticketId);
+      if (!ticket) return;
+      const originalLane = ticket.status;
+      if (originalLane === targetLane) return;
+
+      // Optimistic Update
+      ticket.status = targetLane;
+      ticket.updatedAt = new Date().toISOString();
+      saveTickets();
+      render();
+
+      if (simulateFailure) {
+        // Rollback after simulated async drop
+        setTimeout(() => {
+          ticket.status = originalLane;
+          saveTickets();
+          render();
+          showToast(`Network sync error: Reverted ${ticket.id} to ${originalLane.toUpperCase()}`, true, 'Retry', () => {
+            moveTicket(ticketId, targetLane);
+          });
+        }, 600);
+      } else {
+        showToast(`Moved ${ticket.id} to ${targetLane.replace('_', ' ').toUpperCase()}`);
+      }
+    }
+
+    // --- MODAL CONTROLLER ---
+    function openModalForCreate(lane) {
+      editingTicketId = null;
+      pendingCreateLane = lane;
+      isDraftDirty = false;
+
+      document.getElementById('modalHeading').textContent = 'Create New Ticket';
+      document.getElementById('modalTitleInput').value = '';
+      document.getElementById('modalDescInput').value = '';
+      document.getElementById('modalTagsInput').value = '';
+      document.getElementById('modalStatusSelect').value = lane;
+      document.getElementById('charCount').textContent = '0/100';
+      document.getElementById('modalDeleteBtn').style.display = 'none';
+      document.getElementById('modalTitleError').style.display = 'none';
+
+      document.getElementById('ticketModalBackdrop').classList.add('is-open');
+      setTimeout(() => document.getElementById('modalTitleInput').focus(), 100);
+    }
+
+    function openModalForEdit(ticketId) {
+      const ticket = tickets.find(t => t.id === ticketId);
+      if (!ticket) return;
+
+      editingTicketId = ticketId;
+      isDraftDirty = false;
+
+      document.getElementById('modalHeading').textContent = `Edit Ticket ${ticket.id}`;
+      document.getElementById('modalTitleInput').value = ticket.title;
+      document.getElementById('modalDescInput').value = ticket.description || '';
+      document.getElementById('modalTagsInput').value = ticket.tags.join(', ');
+      document.getElementById('modalStatusSelect').value = ticket.status;
+      document.getElementById('charCount').textContent = `${ticket.title.length}/100`;
+      document.getElementById('modalDeleteBtn').style.display = 'inline-flex';
+      document.getElementById('modalTitleError').style.display = 'none';
+
+      document.getElementById('ticketModalBackdrop').classList.add('is-open');
+      setTimeout(() => document.getElementById('modalTitleInput').focus(), 100);
+    }
+
+    function handleModalCloseAttempt() {
+      if (isDraftDirty) {
+        document.getElementById('discardModalBackdrop').classList.add('is-open');
+      } else {
+        forceCloseModal();
+      }
+    }
+
+    function forceCloseModal() {
+      document.getElementById('ticketModalBackdrop').classList.remove('is-open');
+      isDraftDirty = false;
+      editingTicketId = null;
+    }
+
+    function handleSaveTicket() {
+      const title = document.getElementById('modalTitleInput').value.trim();
+      if (!title) {
+        document.getElementById('modalTitleError').style.display = 'block';
+        document.getElementById('modalTitleInput').focus();
+        return;
+      }
+
+      const status = document.getElementById('modalStatusSelect').value;
+      const desc = document.getElementById('modalDescInput').value.trim();
+      const rawTags = document.getElementById('modalTagsInput').value;
+      const tags = rawTags.split(',').map(t => t.trim().replace(/^#/, '')).filter(Boolean);
+
+      if (editingTicketId) {
+        const ticket = tickets.find(t => t.id === editingTicketId);
+        if (ticket) {
+          ticket.title = title;
+          ticket.status = status;
+          ticket.description = desc;
+          ticket.tags = tags;
+          ticket.updatedAt = new Date().toISOString();
+        }
+        showToast(`Updated ticket ${editingTicketId}`);
+      } else {
+        const newId = `TCK-${Math.floor(100 + Math.random() * 900)}`;
+        tickets.push({
+          id: newId,
+          title,
+          description: desc,
+          status,
+          tags,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        });
+        showToast(`Created ticket ${newId}`);
+      }
+
+      saveTickets();
+      forceCloseModal();
+      render();
+    }
+
+    function handleDeleteTicket() {
+      if (!editingTicketId) return;
+      if (confirm(`Permanently delete ticket ${editingTicketId}?`)) {
+        tickets = tickets.filter(t => t.id !== editingTicketId);
+        saveTickets();
+        forceCloseModal();
+        render();
+        showToast('Ticket deleted');
+      }
+    }
+
+    // --- DRAWER TOGGLE ---
+    document.getElementById('openRationaleBtn').onclick = () => {
+      document.getElementById('infoDrawer').classList.add('is-open');
+    };
+    document.getElementById('closeRationaleBtn').onclick = () => {
+      document.getElementById('infoDrawer').classList.remove('is-open');
+    };
+
+    // INIT
+    render();
+  </script>
+</body>
+</html>
