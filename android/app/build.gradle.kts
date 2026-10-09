@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.vku.receiptmate.receipt_mate"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
