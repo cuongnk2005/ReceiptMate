@@ -74,14 +74,16 @@ class ExpenseItemTile extends StatelessWidget {
                       ),
                       if (expense.note != null && expense.note!.isNotEmpty) ...[
                         const SizedBox(width: 6),
-                        Text(
-                          '•  ${expense.note!}',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
-                            fontSize: 12,
+                        Expanded(
+                          child: Text(
+                            '•  ${expense.note!}',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                              fontSize: 12,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ],
